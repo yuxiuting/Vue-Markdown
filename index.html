@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue Markdown</title>
+    <style>
+        html, body, #editor {
+  margin: 0;
+  height: 100%;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: #333;
+}
+
+textarea, #editor div {
+  display: inline-block;
+  width: 49%;
+  height: 100%;
+  vertical-align: top;
+  box-sizing: border-box;
+  padding: 0 20px;
+}
+
+textarea {
+  border: none;
+  border-right: 1px solid #ccc;
+  resize: none;
+  outline: none;
+  background-color: #f6f6f6;
+  font-size: 14px;
+  font-family: 'Monaco', courier, monospace;
+  padding: 20px;
+}
+
+code {
+  color: #f66;
+}
+    </style>
+</head>
+<body>
+    <p>
+        html 不再直接输出
+        模版 template
+        由vue 进行编译 输出html
+        mvvm  vm 视图模型
+        m  model  data{}
+        v  template
+        vm viewmodel 内存里
+    </p>
+    <div id="editor">
+        <textarea :value="input" @input="update">
+        </textarea>
+        <div v-html="compiledMarkdown"></div>
+    </div>
+    <script src="https://unpkg.com/marked@0.3.6"></script>
+    <script src="https://unpkg.com/vue@2.4.2/dist/vue.js"></script>
+    <script>
+    // ViewModel
+    // 组件化 VUE  UI 框架 封装起来 可拖拽生成页面
+    // Vue 数据绑定 data binding
+    // 单向数据绑定
+    let vm = new Vue({
+        // template: '#editor'
+        el: '#editor',
+        data: {
+            input: '# 你好'
+        },
+        // 方法集合 事件处理函数
+        methods: {
+            update (e) {
+                this.input = e.target.value
+            }
+        },
+        // 需要修饰一下, 
+        computed: {
+            // 计算属性 是最后返回的值
+            // 属性名即方法名
+            // 方法其实是计算的过程
+            compiledMarkdown: function() {
+                return marked(this.input, {
+                     sanitize: true
+                })
+            }
+        }
+    })
+    </script>
+</body>
+</html>
